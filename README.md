@@ -4,8 +4,10 @@ A human-moderated social wall for conferences, meetups, livestreams, and communi
 events. Collect audience questions and social posts, review them privately, and
 choose what appears on stage.
 
-**[Get started](docs/getting-started.md)** · **[Deploy to Azure](docs/deployment/azure.md)** ·
-**[Configure platforms](docs/platforms/index.md)** · **[Documentation](docs/index.md)**
+**[Get started](https://jamesmontemagno.github.io/event-social-post-wall/getting-started)** ·
+**[Deploy to Azure](https://jamesmontemagno.github.io/event-social-post-wall/deployment/azure)** ·
+**[Configure platforms](https://jamesmontemagno.github.io/event-social-post-wall/platforms/)** ·
+**[Documentation](https://jamesmontemagno.github.io/event-social-post-wall/)**
 
 ## What it does
 
@@ -86,13 +88,14 @@ event domain or cloud account is required. Start with the
 [self-hosting guide](docs/deployment/self-hosting.md).
 
 Azure releases are manual, deploy to staging first, and require a protected
-production approval gate. Deployment and documentation publishing are disabled
-until explicitly enabled. **The included baseline is single-instance; read
+production approval gate. Azure deployment is disabled until explicitly enabled;
+documentation updates are published manually. **The included baseline is single-instance; read
 [scaling guidance](docs/operations/scaling.md) before increasing capacity.**
 
 ## Documentation and contributing
 
-The searchable VitePress site is maintained in [docs](docs/). Preview it locally:
+The searchable [documentation website](https://jamesmontemagno.github.io/event-social-post-wall/)
+is maintained in [docs](docs/). Preview it locally:
 
 ```powershell
 npm ci --prefix docs
@@ -101,7 +104,7 @@ npm run dev --prefix docs
 
 See [CONTRIBUTING](CONTRIBUTING.md) for builds, tests, and contributions;
 [SECURITY](SECURITY.md) for private vulnerability reporting; and
-[publishing documentation](docs/deployment/documentation.md) before enabling Pages.
+[publishing documentation](docs/deployment/documentation.md) for Pages setup.
 
 ## License and credits
 
