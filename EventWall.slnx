@@ -1,0 +1,9 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/EventWall.Api/EventWall.Api.csproj" />
+    <Project Path="src/EventWall.AppHost/EventWall.AppHost.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/EventWall.Api.Tests/EventWall.Api.Tests.csproj" />
+  </Folder>
+</Solution>

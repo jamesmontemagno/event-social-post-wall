@@ -1,0 +1,159 @@
+/* Aurora wall styles share the accessible light/dark palette. */
+:root[data-skin] {
+  --display: 'Space Grotesk Variable', 'Space Grotesk', 'Manrope', 'Segoe UI', sans-serif;
+  --conf-glow: rgba(214, 0, 170, .32);
+  --conf-glow-alt: rgba(11, 107, 255, .26);
+  --conf-hero: linear-gradient(120deg, #2a12a8 0%, #5728dc 55%, #0b6bff 100%);
+  --conf-stage: linear-gradient(160deg, #1d0a7a 0%, #3a1fd0 45%, #2563ff 100%);
+}
+:root[data-skin="aurora-pink"] {
+  --conf-glow: rgba(255, 64, 196, .42);
+  --conf-glow-alt: rgba(87, 40, 220, .34);
+  --conf-hero: linear-gradient(120deg, #4a14b8 0%, #8a1bc8 45%, #b8009a 100%);
+  --conf-stage: linear-gradient(160deg, #5a0fa0 0%, #a4009a 45%, #c4007f 100%);
+}
+
+:root[data-skin] .brand-mark {
+  background: linear-gradient(135deg, #5728dc, #b8009a);
+  box-shadow: 0 6px 18px rgba(87, 40, 220, .4);
+}
+:root[data-skin] .wall-hero h1 em {
+  background: linear-gradient(100deg, #b9a4ff 0%, #ff6fd8 50%, #8cc0ff 100%);
+  -webkit-background-clip: text; background-clip: text; color: transparent;
+}
+
+/* ---------- Night ---------- */
+:root[data-skin]:not([data-theme="light"]) {
+  --page: #0d0628; --topbar: rgba(13, 6, 40, .86); --ink: #f4f1ff; --muted: #b9afdd; --faint: #a297cc;
+  --surface: #1c1147; --surface-raised: #241657; --surface-soft: #2d1c68; --hover: #3a2685;
+  --modal: #1c1147; --input: #150c3a;
+  --line: rgba(185, 170, 238, .2); --accent: #b9aaee; --accent-ink: #1f0b5c; --accent-rgb: 150, 120, 255;
+  --violet: #b9aaee; --pink: #ff8ee0; --cyan: #9dc3ff; --primary-hover: #d9cfff;
+  --card: linear-gradient(150deg, rgba(87, 40, 220, .26), rgba(18, 8, 56, .7));
+  --pinned-card: linear-gradient(150deg, rgba(214, 0, 170, .32), rgba(87, 40, 220, .3));
+}
+:root[data-skin]:not([data-theme="light"]) body {
+  background:
+    url('./assets/aurora/stars.svg') center top/1600px auto repeat,
+    radial-gradient(ellipse at 92% -6%, var(--conf-glow), transparent 42rem),
+    radial-gradient(ellipse at 0% 42%, var(--conf-glow-alt), transparent 38rem),
+    linear-gradient(180deg, #120838 0%, #0d0628 60%, #160a45 100%);
+  background-attachment: fixed;
+}
+:root[data-skin]:not([data-theme="light"]) .post-card { border-color: rgba(185, 170, 238, .24); }
+:root[data-skin]:not([data-theme="light"]) .post-card:hover { border-color: var(--accent); }
+
+/* ---------- Day ---------- */
+:root[data-skin][data-theme="light"] {
+  --page: #eeeafa; --topbar: rgba(255, 255, 255, .92); --ink: #1f1e32; --muted: #4c4670; --faint: #5d5680;
+  --surface: #ffffff; --surface-raised: #f6f3ff; --surface-soft: #e6e1ff; --hover: #dcd4ff;
+  --line: rgba(87, 40, 220, .18); --accent: #5728dc; --accent-ink: #ffffff; --accent-rgb: 87, 40, 220;
+  --violet: #5728dc; --pink: #a3007f; --cyan: #0a58d6; --primary-hover: #4420b4;
+  --card: #ffffff; --pinned-card: linear-gradient(150deg, #e6e1ff, #ffffff);
+}
+:root[data-skin][data-theme="light"] body {
+  background: radial-gradient(ellipse at 100% 0%, var(--conf-glow-alt), transparent 40rem), var(--page);
+}
+:root[data-skin][data-theme="light"] .wall-hero {
+  margin-top: 36px; padding: 44px clamp(24px, 3.5vw, 48px) 40px; border: 0; border-radius: 28px;
+  background: url('./assets/aurora/stars.svg') center/900px auto, radial-gradient(ellipse at 85% 15%, var(--conf-glow), transparent 28rem), var(--conf-hero);
+  box-shadow: 0 20px 50px rgba(87, 40, 220, .25);
+  --ink: #ffffff; --muted: #ece7ff; --line: rgba(255, 255, 255, .4);
+}
+:root[data-skin][data-theme="light"] .wall-hero h1 em {
+  background-image: linear-gradient(100deg, #ffe0f6, #ffa6e6 50%, #cfe3ff);
+}
+:root[data-skin][data-theme="light"] .wall-hero .live-dot { background: #fff; }
+:root[data-skin][data-theme="light"] .wall-hero .wall-online { color: #fff; }
+:root[data-skin][data-theme="light"] .wall-hero .wall-offline { color: #ffe1e1; }
+:root[data-skin][data-theme="light"] .wall-hero .status-dot { background: #a8f0ad; }
+:root[data-skin][data-theme="light"] .wall-hero .button-refresh,
+:root[data-skin][data-theme="light"] .wall-hero .button-muted { background: rgba(255, 255, 255, .16); color: #fff; }
+:root[data-skin][data-theme="light"] .wall-hero .button-refresh:hover,
+:root[data-skin][data-theme="light"] .wall-hero .button-muted:hover { background: rgba(255, 255, 255, .28); border-color: #fff; }
+:root[data-skin][data-theme="light"] .wall-hero :focus-visible { outline-color: #fff; }
+:root[data-skin][data-theme="light"] .post-card {
+  border-top: 3px solid transparent;
+  border-image: linear-gradient(90deg, #5728dc, #d600aa, #0b6bff) 1;
+  box-shadow: 0 4px 18px rgba(87, 40, 220, .08);
+}
+
+/* ---------- Immersive ---------- */
+:root[data-skin] .immersive-wall {
+  background:
+    url('./assets/aurora/stars.svg') center/1600px auto,
+    radial-gradient(ellipse at 90% 0%, var(--conf-glow), transparent 40rem),
+    var(--conf-stage);
+  background-attachment: fixed;
+}
+:root[data-skin] .immersive-wall .section-heading { color: rgba(255, 255, 255, .86); }
+:root[data-skin] .immersive-wall .section-kicker { color: #fff; }
+:root[data-skin]:not([data-theme="light"]) .immersive-wall {
+  --ink: #ffffff; --muted: #e2dbff; --faint: #d4cbff; --line: rgba(255, 255, 255, .24);
+  --surface: #2a1890; --surface-soft: #3a25a8; --hover: #4a34bd; --accent: #ffffff; --accent-ink: #3a17c4; --accent-rgb: 255, 255, 255;
+  --card: linear-gradient(150deg, rgba(255, 255, 255, .17), rgba(255, 255, 255, .07));
+  --pinned-card: linear-gradient(150deg, rgba(214, 0, 170, .5), rgba(255, 255, 255, .1));
+}
+:root[data-skin="aurora-pink"]:not([data-theme="light"]) .immersive-wall { --surface: #6a138f; --surface-soft: #7d1ca4; --hover: #8f2bb8; }
+:root[data-skin]:not([data-theme="light"]) .immersive-wall .question-prompt { background: rgba(255, 255, 255, .1); }
+:root[data-skin]:not([data-theme="light"]) .immersive-wall .post-card {
+  border-color: rgba(255, 255, 255, .26); box-shadow: 0 12px 40px rgba(10, 0, 80, .25);
+  backdrop-filter: blur(14px) saturate(1.2);
+}
+:root[data-skin][data-theme="light"] .immersive-wall .post-card { box-shadow: 0 12px 40px rgba(10, 0, 80, .22); }
+
+/* ---------- NetBot sprites (decorative) ---------- */
+.netbot-rocket {
+  display: block; aspect-ratio: 600 / 353; pointer-events: none;
+  background: url('./assets/aurora/rocket.svg') center / contain no-repeat;
+}
+.netbot-rocket.is-launch { rotate: -90deg; }
+.netbot-rocket:not(.is-cruise):not(.is-launch) { scale: -1 1; }
+.netbot-hero {
+  flex: 0 0 auto; align-self: center; width: clamp(200px, 20vw, 320px);
+  margin: -32px -8px -24px -28px;
+  filter: drop-shadow(0 18px 30px rgba(10, 0, 60, .4));
+}
+.netbot-flyby {
+  position: fixed; z-index: 20; left: 0; width: clamp(150px, 16vw, 280px);
+  filter: drop-shadow(0 18px 28px rgba(10, 0, 60, .45));
+  animation: netbot-fly linear both;
+}
+.netbot-flyby.is-cruise { animation-name: netbot-cruise; }
+.netbot-flyby.is-launch { top: 0; width: clamp(100px, 10vw, 170px); animation-name: netbot-launch; }
+.netbot-peek {
+  position: fixed; z-index: 16; right: clamp(16px, 3vw, 40px); bottom: 0; width: clamp(80px, 7vw, 120px); height: auto;
+  pointer-events: none; transform: translateY(110%) rotate(-10deg); opacity: 0;
+  transition: transform .5s cubic-bezier(.3, 1.4, .5, 1), opacity .3s;
+}
+.netbot-peek.is-visible { transform: translateY(28%) rotate(-10deg); opacity: 1; }
+@media (prefers-reduced-motion: no-preference) {
+  .netbot-hero { animation: netbot-bob 6s ease-in-out infinite; }
+}
+@keyframes netbot-bob {
+  0%, 100% { transform: translate(0, 0) rotate(0deg); }
+  50% { transform: translate(6px, -10px) rotate(-2deg); }
+}
+@keyframes netbot-fly {
+  0% { transform: translate(110vw, 0) rotate(var(--fly-tilt, 0deg)); }
+  50% { transform: translate(37.5vw, calc(var(--fly-rise, -16vh) / 2 - 2vh)) rotate(var(--fly-tilt, 0deg)); }
+  100% { transform: translate(-35vw, var(--fly-rise, -16vh)) rotate(var(--fly-tilt, 0deg)); }
+}
+@keyframes netbot-cruise {
+  0% { transform: translate(-35vw, 0) rotate(var(--fly-tilt, 0deg)); }
+  50% { transform: translate(37.5vw, calc(var(--fly-rise, 0vh) / 2 - 2vh)) rotate(var(--fly-tilt, 0deg)); }
+  100% { transform: translate(110vw, var(--fly-rise, 0vh)) rotate(var(--fly-tilt, 0deg)); }
+}
+@keyframes netbot-launch {
+  0% { transform: translate(0, 110vh) rotate(var(--fly-tilt, 0deg)); }
+  100% { transform: translate(var(--fly-drift, 0vw), -60vh) rotate(var(--fly-tilt, 0deg)); }
+}
+
+.skin-select { padding-right: 8px; }
+
+@media (max-width: 899px) {
+  .netbot-hero { display: none; }
+}
+@media (max-width: 760px) {
+  :root[data-skin][data-theme="light"] .wall-hero { margin-top: 20px; padding: 32px 20px 24px; border-radius: 20px; }
+}

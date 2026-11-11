@@ -1,0 +1,12 @@
+<script type="module" src="@Assets["questions/reconnect.js"]"></script>
+<dialog id="components-reconnect-modal" aria-labelledby="question-reconnect-title" data-nosnippet>
+    <h2 id="question-reconnect-title">Reconnect to your question</h2>
+    <p class="reconnect-progress" role="status">Rejoining the server...</p>
+    <p class="reconnect-retrying" role="status">Trying again in <span id="components-seconds-to-next-attempt"></span> seconds.</p>
+    <p class="reconnect-failed" role="alert">The connection is unavailable. Retry when ready; your question will not be sent automatically.</p>
+    <p class="reconnect-rejected" role="alert">This session has ended. Reload to start a new connection; your tab's saved draft will be restored.</p>
+    <p class="reconnect-paused" role="status">This session has been paused. Resume when ready.</p>
+    <button id="question-reconnect-retry" class="question-send reconnect-failed" type="button">Retry connection</button>
+    <button id="question-reconnect-resume" class="question-send reconnect-paused" type="button">Resume connection</button>
+    <button id="question-reconnect-reload" class="question-send reconnect-rejected" type="button">Reload question page</button>
+</dialog>

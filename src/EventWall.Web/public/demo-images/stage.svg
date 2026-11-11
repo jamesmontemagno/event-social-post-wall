@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="540" viewBox="0 0 960 540">
+  <rect width="960" height="540" fill="#251c33"/>
+  <path d="M140 0h110l220 460H0Zm570 0h110l140 460H490Z" fill="#483356"/>
+  <rect x="196" y="95" width="568" height="280" rx="22" fill="#12131d" stroke="#a78bfa" stroke-width="3"/>
+  <text x="280" y="175" font-family="sans-serif" font-size="20" fill="#d5fa68">FICTIONAL DEMO ATTACHMENT</text>
+  <text x="278" y="258" font-family="sans-serif" font-size="56" font-weight="bold" fill="#f0f1f6">Build together.</text>
+  <text x="345" y="316" font-family="sans-serif" font-size="28" fill="#75d8e7">Community Event community</text>
+  <rect x="80" y="420" width="800" height="60" rx="18" fill="#a78bfa"/>
+  <path d="M0 500h960v40H0Z" fill="#101116"/>
+</svg>

@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="540" viewBox="0 0 960 540">
+  <rect width="960" height="540" fill="#15252b"/>
+  <rect x="54" y="48" width="852" height="444" rx="24" fill="#10171e" stroke="#75d8e7" stroke-width="2"/>
+  <circle cx="88" cy="81" r="7" fill="#fd9cc5"/><circle cx="113" cy="81" r="7" fill="#d5fa68"/><circle cx="138" cy="81" r="7" fill="#75d8e7"/>
+  <text x="180" y="88" font-family="monospace" font-size="20" fill="#9b9da9">FICTIONAL DEMO / Program.cs</text>
+  <g font-family="monospace" font-size="28">
+    <text x="90" y="176" fill="#a78bfa">var app = builder.Build();</text>
+    <text x="90" y="241" fill="#75d8e7">app.MapGet("/", () =&gt;</text>
+    <text x="124" y="290" fill="#d5fa68">"Hello, Community Event!");</text>
+    <text x="90" y="366" fill="#f0f1f6">app.Run();</text>
+  </g>
+  <text x="90" y="446" font-family="sans-serif" font-size="20" fill="#9b9da9">Community questions. Real possibilities.</text>
+</svg>

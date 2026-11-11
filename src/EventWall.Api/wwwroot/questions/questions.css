@@ -1,0 +1,95 @@
+.question-shell { min-height: 100dvh; display: flex; flex-direction: column; }
+.question-header { display: flex; align-items: center; justify-content: space-between; gap: 20px; padding: 24px clamp(20px, 5vw, 76px); border-bottom: 1px solid var(--line); }
+.question-brand { display: inline-flex; gap: 12px; align-items: center; text-decoration: none; }
+.question-mark { display: grid; place-items: center; background: var(--accent); color: var(--accent-ink); width: 42px; height: 42px; border-radius: 14px; font: 800 24px var(--display); }
+.question-brand strong { display: block; font: 700 16px var(--display); }
+.question-brand small { display: block; color: var(--muted); font: 10px var(--mono); letter-spacing: .12em; margin-top: 5px; }
+.question-page { flex: 1; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 540px); gap: clamp(30px, 6vw, 96px); align-items: center; width: min(1280px, 100%); margin: 0 auto; padding: 72px clamp(20px, 5vw, 76px); }
+.question-eyebrow { font: 11px/1.8 var(--mono); letter-spacing: .13em; color: var(--accent); }
+.question-introduction h1 { font: 650 clamp(38px, 4.7vw, 64px)/1.08 var(--display); letter-spacing: -.055em; margin: 22px 0; }
+.question-introduction h1 em { font-style: normal; color: var(--accent); }
+.question-introduction > p:not(.question-eyebrow) { color: var(--muted); line-height: 1.8; max-width: 380px; }
+.question-process { display: flex; flex-direction: column; gap: 15px; margin-top: 36px; font: 12px var(--mono); color: var(--muted); }
+.question-demo { border: 1px solid var(--line); border-radius: 10px; padding: 10px 15px; margin-top: 24px; }
+.question-card { padding: clamp(24px, 3.5vw, 40px); border: 1px solid var(--line); border-radius: 24px; background: var(--portal-card); box-shadow: 0 24px 80px rgba(0,0,0,.12); min-width: 0; }
+.question-card h2 { font: 650 25px/1.3 var(--display); letter-spacing: -.035em; margin: 0 0 12px; }
+.question-subtitle, .question-success p { color: var(--muted); font-size: 14px; line-height: 1.65; }
+.question-card label { display: block; color: var(--ink); font-size: 14px; font-weight: 600; margin: 26px 0 10px; }
+.question-card label span { font-weight: 400; color: var(--muted); }
+.question-card textarea, .question-card input { width: 100%; padding: 14px; color: var(--ink); background: var(--input); border: 1px solid var(--line); border-radius: 12px; font-size: 16px; }
+.question-card textarea { resize: vertical; min-height: 160px; line-height: 1.6; }
+.question-card textarea::placeholder, .question-card input::placeholder { color: var(--faint); }
+.question-count { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 6px; margin-top: 8px; color: var(--muted); font-size: 11px; }
+.question-privacy, .question-safety { color: var(--muted); font-size: 12px; line-height: 1.7; margin: 22px 0; }
+.question-safety { text-align: center; margin-bottom: 0; }
+.question-send { width: 100%; min-height: 50px; display: flex; align-items: center; justify-content: center; gap: 16px; padding: 14px; border: 0; border-radius: 12px; background: var(--accent); color: var(--accent-ink); font-weight: 700; cursor: pointer; }
+.question-send:hover:not(:disabled) { background: var(--primary-hover); }
+.question-send:disabled { opacity: .6; cursor: not-allowed; }
+.question-error { margin: 18px 0; padding: 14px; border: 1px solid var(--accent); border-radius: 10px; color: var(--ink); font-size: 14px; line-height: 1.6; overflow-wrap: anywhere; }
+.question-challenge { min-height: 65px; margin: 0 0 18px; }
+.question-card .question-honeypot { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; margin: 0; }
+.question-success { text-align: center; padding: 30px 0; }
+.question-success > span { display: grid; place-items: center; width: 60px; height: 60px; border-radius: 20px; background: var(--surface-soft); color: var(--accent); font-size: 40px; margin: 0 auto 25px; }
+.question-browser-warning { margin: 0; padding: 0 24px; color: var(--muted); font-size: 13px; text-align: center; }
+.question-browser-warning:not(:empty) { padding-block: 16px; }
+#blazor-error-ui { display: none; position: fixed; bottom: 0; padding: 20px; width: 100%; background: var(--surface); color: var(--ink); border-top: 2px solid var(--accent); z-index: 1000; }
+#blazor-error-ui a { margin-left: 12px; }
+#components-reconnect-modal { width: min(440px, 90vw); padding: 28px; border: 1px solid var(--line); border-radius: 20px; background: var(--modal); color: var(--ink); }
+#components-reconnect-modal::backdrop { background: rgba(0, 0, 0, .65); }
+#components-reconnect-modal h2 { font: 650 24px var(--display); }
+#components-reconnect-modal p { line-height: 1.7; }
+#components-reconnect-modal > p, #components-reconnect-modal > button { display: none; }
+#components-reconnect-modal.components-reconnect-show .reconnect-progress,
+#components-reconnect-modal.components-reconnect-retrying .reconnect-retrying,
+#components-reconnect-modal.components-reconnect-failed .reconnect-failed,
+#components-reconnect-modal.components-reconnect-rejected .reconnect-rejected,
+#components-reconnect-modal.components-reconnect-paused .reconnect-paused,
+#components-reconnect-modal.components-reconnect-resume-failed .reconnect-paused { display: block; }
+
+/* ---------- Aurora skin ---------- */
+.question-shell { position: relative; isolation: isolate; }
+:root[data-skin] .question-mark {
+  background: linear-gradient(135deg, #5728dc, #b8009a);
+  box-shadow: 0 6px 18px rgba(87, 40, 220, .4);
+}
+:root[data-skin] .question-introduction h1 em {
+  background: linear-gradient(100deg, #b9a4ff 0%, #ff6fd8 50%, #8cc0ff 100%);
+  -webkit-background-clip: text; background-clip: text; color: transparent;
+}
+:root[data-skin][data-theme="light"] .question-introduction h1 em { background-image: linear-gradient(100deg, #5728dc 0%, #b8009a 50%, #0a58d6 100%); }
+:root[data-skin] .question-card { background: var(--card); backdrop-filter: blur(16px) saturate(1.2); }
+:root[data-skin]:not([data-theme="light"]) .question-card { border-color: rgba(185, 170, 238, .24); box-shadow: 0 24px 80px rgba(10, 0, 60, .45); }
+:root[data-skin][data-theme="light"] .question-card { box-shadow: 0 24px 70px rgba(87, 40, 220, .16); }
+:root[data-skin] .question-send { background: linear-gradient(100deg, #5728dc 0%, #8a1bc8 55%, #b8009a 100%); color: #fff; }
+:root[data-skin] .question-send:hover:not(:disabled) { background: linear-gradient(100deg, #4420b4 0%, #7314a8 55%, #990080 100%); }
+
+/* Decorative dotnet bots: CSS-only, so they add no Blazor circuit traffic. They paint behind the shell's content.
+   Each pose makes one pass per 72s cycle (the first 14%), staggered so a rocket appears about every 24s. */
+.question-netbot {
+  position: fixed; z-index: -1; top: 0; left: 0; width: clamp(130px, 17vw, 280px);
+  filter: drop-shadow(0 18px 28px rgba(10, 0, 60, .35));
+  animation: question-netbot-cruise-left 72s 2s infinite linear both;
+}
+.question-netbot.is-cruise { animation-name: question-netbot-cruise; animation-delay: 26s; }
+.question-netbot.is-launch { width: clamp(90px, 10vw, 170px); animation-name: question-netbot-launch; animation-delay: 50s; }
+:root:not([data-skin]) .question-netbot { display: none; }
+@keyframes question-netbot-cruise-left {
+  0% { transform: translate(110vw, 62vh) rotate(3deg); }
+  14%, 100% { transform: translate(-45vw, 44vh) rotate(3deg); }
+}
+@keyframes question-netbot-cruise {
+  0% { transform: translate(-45vw, 20vh) rotate(-2deg); }
+  14%, 100% { transform: translate(110vw, 8vh) rotate(-2deg); }
+}
+@keyframes question-netbot-launch {
+  0% { transform: translate(70vw, 110vh) rotate(4deg); }
+  14%, 100% { transform: translate(62vw, -60vh) rotate(4deg); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .question-netbot { display: none; }
+}
+@media (max-width: 850px) {
+  .question-page { grid-template-columns: minmax(0, 1fr); max-width: 620px; padding-top: 36px; gap: 28px; }
+  .question-introduction h1 { font-size: clamp(36px, 8vw, 50px); }
+  .question-process { flex-direction: row; flex-wrap: wrap; margin-top: 24px; font-size: 10px; }
+}

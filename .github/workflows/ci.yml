@@ -1,0 +1,129 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pull-requests: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - name: Detect changed projects
+        id: changes
+        uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
+        with:
+          script: |
+            const files = context.payload.pull_request
+              ? await github.paginate(github.rest.pulls.listFiles, {
+                  ...context.repo,
+                  pull_number: context.payload.pull_request.number,
+                  per_page: 100,
+                })
+              : null;
+            const paths = files?.flatMap(file => [file.filename, file.previous_filename].filter(Boolean)) ?? [];
+            // GitHub caps pull-request file listings at 3,000; validate everything if truncated.
+            const all = !files || files.length >= 3000 || paths.includes('.github/workflows/ci.yml');
+            const changed = folder => paths.some(path => path.startsWith(folder));
+            const solution = all || paths.includes('EventWall.slnx') ||
+              paths.some(path => /(^|\/)(global\.json|Directory\.Build\.[^/]+|Directory\.Packages\.props|[Nn]u[Gg]et\.[Cc]onfig)$/.test(path));
+            const sharedQuestionsAssets = paths.some(path => [
+              'src/EventWall.Web/src/index.css',
+              'src/EventWall.Web/src/SiteFooter.css',
+              'src/EventWall.Web/src/skin.css',
+              'src/EventWall.Web/public/THIRD-PARTY-NOTICES.txt',
+            ].includes(path) || path.startsWith('src/EventWall.Web/src/assets/aurora/'));
+            const questions = all || sharedQuestionsAssets || changed('src/EventWall.Api/Components/') ||
+              changed('src/EventWall.Api/wwwroot/questions/') || paths.includes('tools/demo/questions-client.test.mjs');
+            const api = solution || changed('src/EventWall.Api/') || sharedQuestionsAssets;
+            const apphost = api || changed('src/EventWall.AppHost/');
+            const tests = api || changed('tests/EventWall.Api.Tests/');
+            const database = api || changed('tools/EventWall.DatabaseSetup/');
+            const web = all || paths.includes('.npmrc') || changed('src/EventWall.Web/');
+            const release = all || paths.includes('.github/workflows/release-azure.yml') ||
+              paths.includes('tools/azure/release-workflow.test.mjs');
+            const docs = all || changed('docs/') || paths.includes('.github/workflows/publish-pages.yml');
+            const infra = all || changed('infra/');
+            for (const [name, value] of Object.entries({
+              solution, api, apphost, tests, database, web, questions, release, docs, infra,
+              dotnet: solution || api || apphost || tests || database,
+            })) {
+              core.setOutput(name, value);
+            }
+      - uses: actions/setup-dotnet@0f4a354dd5547a28c70b7853dbd95d5b67886e73 # v6.1.0
+        if: steps.changes.outputs.dotnet == 'true'
+        with:
+          dotnet-version: 10.0.x
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        if: steps.changes.outputs.web == 'true' || steps.changes.outputs.questions == 'true' || steps.changes.outputs.release == 'true' || steps.changes.outputs.docs == 'true'
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: |
+            src/EventWall.Web/package-lock.json
+            docs/package-lock.json
+      - name: Build .NET solution for shared changes
+        if: steps.changes.outputs.solution == 'true'
+        run: dotnet build EventWall.slnx --configuration Release
+      - name: Build API
+        if: steps.changes.outputs.api == 'true' && steps.changes.outputs.solution != 'true'
+        run: dotnet build src/EventWall.Api/EventWall.Api.csproj --configuration Release
+      - name: Build Aspire AppHost
+        if: steps.changes.outputs.apphost == 'true' && steps.changes.outputs.solution != 'true'
+        run: dotnet build src/EventWall.AppHost/EventWall.AppHost.csproj --configuration Release ${{ steps.changes.outputs.api == 'true' && '--no-dependencies' || '' }}
+      - name: Build API test project
+        if: steps.changes.outputs.tests == 'true' && steps.changes.outputs.solution != 'true'
+        run: dotnet build tests/EventWall.Api.Tests/EventWall.Api.Tests.csproj --configuration Release ${{ steps.changes.outputs.api == 'true' && '--no-dependencies' || '' }}
+      - name: Build database setup tool
+        if: steps.changes.outputs.database == 'true'
+        run: dotnet build tools/EventWall.DatabaseSetup/EventWall.DatabaseSetup.csproj --configuration Release ${{ steps.changes.outputs.api == 'true' && '--no-dependencies' || '' }}
+      - name: Install web dependencies
+        if: steps.changes.outputs.web == 'true'
+        run: npm ci --prefix src/EventWall.Web
+      - name: Test API
+        if: steps.changes.outputs.tests == 'true'
+        run: dotnet test tests/EventWall.Api.Tests/EventWall.Api.Tests.csproj --configuration Release --no-build
+      - name: Test and lint web app
+        if: steps.changes.outputs.web == 'true'
+        run: |
+          npm test --prefix src/EventWall.Web
+          npm run lint --prefix src/EventWall.Web
+      - name: Build public web app
+        if: steps.changes.outputs.web == 'true'
+        env:
+          VITE_SITE_ROLE: public
+        run: |
+          npm run build --prefix src/EventWall.Web
+          node tools/demo/verify-build.mjs public src/EventWall.Web/dist
+      - name: Build admin web app
+        if: steps.changes.outputs.web == 'true'
+        env:
+          VITE_SITE_ROLE: admin
+        run: |
+          npm run build --prefix src/EventWall.Web
+          node tools/demo/verify-build.mjs admin src/EventWall.Web/dist
+      - name: Test Blazor browser transport
+        if: steps.changes.outputs.questions == 'true'
+        run: node --test tools/demo/questions-client.test.mjs
+      - name: Test Azure release authentication
+        if: steps.changes.outputs.release == 'true'
+        run: node --test tools/azure/release-workflow.test.mjs
+      - name: Build documentation and check internal links
+        if: steps.changes.outputs.docs == 'true'
+        run: |
+          npm ci --prefix docs
+          npm run build --prefix docs
+      - name: Compile infrastructure
+        if: steps.changes.outputs.infra == 'true'
+        run: az bicep build --file infra/main.bicep --outfile "${{ runner.temp }}/main.json"

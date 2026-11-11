@@ -1,0 +1,40 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="10.0.14">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="10.0.14" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="10.0.14" />
+    <PackageReference Include="System.Security.Cryptography.Pkcs" Version="10.0.14" />
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(EventWallSiteRole)' != 'public' and '$(EventWallSiteRole)' != 'admin'">
+    <QuestionAsset Include="..\EventWall.Web\src\index.css" Destination="wwwroot\questions\theme.css" />
+    <QuestionAsset Include="..\EventWall.Web\src\SiteFooter.css" Destination="wwwroot\questions\footer.css" />
+    <QuestionAsset Include="..\EventWall.Web\src\skin.css" Destination="wwwroot\questions\skin.css" />
+    <QuestionAsset Include="..\EventWall.Web\src\assets\aurora\*.svg" Destination="wwwroot\questions\assets\aurora\%(Filename)%(Extension)" />
+    <QuestionAsset Include="..\EventWall.Web\public\THIRD-PARTY-NOTICES.txt" Destination="wwwroot\THIRD-PARTY-NOTICES.txt" />
+  </ItemGroup>
+  <ItemGroup Condition="'$(EventWallSiteRole)' == 'public' or '$(EventWallSiteRole)' == 'admin'">
+    <Content Remove="wwwroot\questions\**" />
+  </ItemGroup>
+
+  <!-- Static-asset development manifests need physical files under their declared content root. -->
+  <Target Name="CopyQuestionAssets" BeforeTargets="ResolveProjectStaticWebAssets" Condition="'@(QuestionAsset)' != ''">
+    <Copy SourceFiles="@(QuestionAsset)" DestinationFiles="@(QuestionAsset->'%(Destination)')" SkipUnchangedFiles="true" />
+    <ItemGroup>
+      <Content Remove="@(QuestionAsset->'%(Destination)')" />
+      <Content Include="@(QuestionAsset->'%(Destination)')" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" />
+      <FileWrites Include="@(QuestionAsset->'%(Destination)')" />
+    </ItemGroup>
+  </Target>
+
+</Project>

@@ -1,0 +1,4 @@
+.technology-footer { border-top: 1px solid var(--line); padding: 24px clamp(22px, 5vw, 76px); color: var(--muted); font-size: 13px; line-height: 1.8; text-align: center; }
+.technology-footer p { margin: 0; }
+.technology-footer a { color: var(--ink); text-underline-offset: 3px; }
+.technology-footer a:hover { color: var(--accent); }

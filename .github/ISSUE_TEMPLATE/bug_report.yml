@@ -1,0 +1,31 @@
+name: Bug report
+description: Report a reproducible problem without credentials or attendee data.
+body:
+  - type: markdown
+    attributes:
+      value: "For vulnerabilities, use SECURITY.md and private reporting instead of this form. Never attach credentials, databases, or real attendee data."
+  - type: input
+    id: version
+    attributes:
+      label: Commit or release
+    validations:
+      required: true
+  - type: textarea
+    id: environment
+    attributes:
+      label: Environment
+      description: OS, .NET/Node versions, role, local/Azure/self-hosted, demo or real collection.
+    validations:
+      required: true
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: Reproduction and expected behavior
+      description: Prefer a minimal reproduction with fictional demo data.
+    validations:
+      required: true
+  - type: textarea
+    id: logs
+    attributes:
+      label: Sanitized errors or screenshots
+      description: Remove secrets, tokens, cookies, connection strings, and personal data.

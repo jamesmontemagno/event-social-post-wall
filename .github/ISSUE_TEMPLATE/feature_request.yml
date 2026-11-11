@@ -1,0 +1,16 @@
+name: Feature request
+description: Suggest an improvement for event operators or contributors.
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: What problem should this solve?
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed behavior and alternatives
+      description: Include privacy, provider policy, deployment, or cost considerations when relevant.
+    validations:
+      required: true

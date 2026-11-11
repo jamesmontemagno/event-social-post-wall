@@ -1,0 +1,33 @@
+@inject IConfiguration Configuration
+
+<!DOCTYPE html>
+<html lang="en" data-skin="aurora">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#0d0628" />
+    <meta name="description" content="Ask the event team a question. Every question is reviewed before publication." />
+    <meta name="eventwall-role" content="submission" />
+    <base href="/" />
+    <title>@(Configuration["Event:Name"] ?? "Community Event") Community Questions</title>
+    <ResourcePreloader />
+    <link rel="stylesheet" href="@Assets["questions/theme.css"]" />
+    <link rel="stylesheet" href="@Assets["questions/skin.css"]" />
+    <link rel="stylesheet" href="@Assets["questions/questions.css"]" />
+    <link rel="stylesheet" href="@Assets["questions/footer.css"]" />
+    <script src="@Assets["questions/theme-init.js"]"></script>
+    <ImportMap />
+    <HeadOutlet />
+</head>
+<body>
+    <Questions @rendermode="InteractiveServer" />
+    <p id="questions-browser-warning" class="question-browser-warning" role="status"></p>
+    <QuestionReconnect />
+    <div id="blazor-error-ui" role="alert">
+        The question page encountered an error. Your draft has not been sent automatically.
+        <a href="" class="reload">Reload the page</a>
+    </div>
+    <noscript><p class="question-browser-warning">Enable JavaScript to connect to the question page.</p></noscript>
+    <script src="@Assets["_framework/blazor.web.js"]"></script>
+</body>
+</html>
