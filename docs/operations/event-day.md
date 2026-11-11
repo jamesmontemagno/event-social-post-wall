@@ -8,6 +8,8 @@
 - [ ] Configure the real question URL and your event name/hashtag.
 - [ ] Open intake, submit from an attendee device, approve, and refresh the host wall.
 - [ ] Test each enabled provider with a new post, image/profile, and deletion/withdrawal.
+- [ ] Check YouTube OAuth publishing status and token age; External apps in Testing
+      expire YouTube refresh tokens after seven days. [Plan reauthorization](../platforms/youtube.md).
 - [ ] Check quotas, X budget, source health, logs, SQL utilization, and backup recovery.
 - [ ] Test the actual venue network: NAT can make attendees share an IP-based limit.
 - [ ] Rehearse projector resolution, light/dark mode, immersive mode, and keyboard navigation.
@@ -16,9 +18,9 @@
 ## Owner and moderators
 
 The bootstrap owner signs in as `admin` with `STAFF_PASSCODE`.
-Owners manage team access, source settings, intake, filters, manual entry, reports,
-and exports. Moderators can review, approve/reject/withdraw, block verified social
-accounts, and manage promotional cards, but cannot access owner-only APIs.
+Owners manage team access, source settings, intake, filters, reports, and exports.
+Moderators can add manual entries, review, approve/reject/withdraw, block verified
+social accounts, and manage promotional cards, but cannot access owner-only APIs.
 
 In **Team**, invite a moderator using a unique permanent username. Usernames are
 case-insensitive, 3-40 ASCII letters/digits/dots/hyphens/underscores, starting with
@@ -43,6 +45,10 @@ New content is Pending or automatically Rejected. Review before selecting
 **Approve & send live**. Inspect photos in the attachment preview without
 publishing them. List/Grid views, search, source/time attribution, and rejection
 reasons help triage a busy queue.
+
+Owners and moderators can use **Add manually** to enter a message with optional
+attribution and an HTTPS source link. Manual entries are unverified, pass through
+the same filters, and still require approval before appearing on the wall.
 
 **Withdraw** removes a live item. The wall checks roughly every minute and on tab
 visibility, so removal is not instantaneous. During an outage, a wall keeps its

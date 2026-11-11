@@ -4,6 +4,18 @@ The collector polls live chat using OAuth and honors the returned polling interv
 with an additional minimum of 60 seconds. It starts **stopped**, even when server
 credentials and policy gates are configured.
 
+::: danger YouTube refresh tokens expire after 7 days in Testing mode
+If your Google OAuth app has an **External** audience and its publishing status
+is **Testing**, Google expires refresh tokens for the YouTube scope after
+**seven days**. Access-token refreshes and saving a rotated refresh token do not
+remove this limit. Collection will stop until you reauthorize.
+
+Check the app's publishing status before an event. Either reauthorize close
+enough to the event or plan for Google's production publishing and verification
+requirements in advance. Production tokens can still expire or be revoked for
+other reasons. See [Google's refresh token expiration guidance](https://developers.google.com/identity/protocols/oauth2#expiration).
+:::
+
 ## Create credentials and authorize a channel
 
 1. Create/select a project in the [Google Cloud console](https://console.cloud.google.com/).
@@ -26,10 +38,6 @@ request the scope above with offline access, authorize the correct channel
 account, and exchange the code. Do not use shared playground credentials for a
 long-running deployment. Handle tokens privately and remove unnecessary redirect
 URIs after setup.
-
-External OAuth apps in **Testing** generally issue refresh tokens that expire
-after seven days when YouTube scopes are requested. For a real event, understand
-Google's publishing/verification requirements well before event day.
 
 ## Find the live chat ID
 
@@ -66,6 +74,25 @@ request may finish.
 Send a new exact `#question` message and verify moderation before publication.
 Starting collection returns recent messages supplied by YouTube, not guaranteed
 history for the period while stopped.
+
+## Token storage and reauthorization
+
+When Google returns a changed refresh token, Admin encrypts it with ASP.NET Data
+Protection and saves it in `ProviderCredentials`. The saved token takes precedence
+over `Social__YouTube__RefreshToken`; back up the Admin data-protection key ring
+alongside the database. If no new refresh token is returned, the existing token
+remains in use.
+
+::: warning Reauthorization requires replacing the stored token
+Changing the configured token alone does not override a saved rotated token.
+Stop YouTube collection and any Admin instances, obtain a new refresh token for
+the same client and authorized channel, and update the Admin secret configuration.
+If a YouTube row exists in `ProviderCredentials`, remove **only** that row using
+a privileged database maintenance session before restarting Admin. Do not clear
+other providers' credentials or reset the database. Restart Admin, start YouTube
+collection, and verify a new `#question` reaches the review queue. Never expose
+tokens in logs or screenshots.
+:::
 
 ## Quota and errors
 

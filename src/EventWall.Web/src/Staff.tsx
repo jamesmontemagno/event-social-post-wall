@@ -294,15 +294,15 @@ function StaffConsole({ onLogout, session }: { onLogout: () => void; session: St
           <div className="queue-header">
             <div><h2>{tab === 'approved' ? 'Approved and live' : 'Incoming conversation'}</h2><p>{tab === 'approved' ? 'Review published posts. Withdraw anything approved by mistake.' : 'Nothing reaches the wall without your say.'}</p></div>
             <div className="queue-actions">
-              {isAdministrator && <button className="button button-muted" onClick={() => setManualOpen(value => !value)}>＋ Add manually</button>}
+              <button className="button button-muted" onClick={() => setManualOpen(value => !value)}>＋ Add manually</button>
               <button className="button button-muted" onClick={() => void loadQueue().catch(cause => setError(cause instanceof Error ? cause.message : 'Could not refresh posts.'))}>Refresh posts</button>
             </div>
           </div>
           {manualOpen && <form className="manual-form" onSubmit={event => void addManual(event)}>
             <strong>Add an unverified post</strong>
-            <textarea name="manualText" required maxLength={2000} rows={3} placeholder="Paste the text exactly as provided" />
-            <input name="manualAuthor" maxLength={80} placeholder="Author attribution (optional)" />
-            <input name="manualUrl" type="url" placeholder="HTTPS source link (optional)" />
+            <textarea name="manualText" aria-label="Post text" required maxLength={2000} rows={3} placeholder="Paste the text exactly as provided" />
+            <input name="manualAuthor" aria-label="Author attribution (optional)" maxLength={80} placeholder="Author attribution (optional)" />
+            <input name="manualUrl" aria-label="HTTPS source link (optional)" type="url" placeholder="HTTPS source link (optional)" />
             <div className="form-actions"><span>Manual entries are filtered and still need staff approval.</span><button className="button button-primary">Add post</button></div>
           </form>}
           <div className="queue-filters">

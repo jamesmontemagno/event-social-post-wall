@@ -32,6 +32,7 @@ sharing logs.
 | Images missing | Source/media allowlist, HTTPS, upstream removal, or content policy filters |
 | Source configured but not collecting | Demo off, Enabled/PolicyApproved true, credentials, source-specific quota/control |
 | YouTube idle | Owner must explicitly Start collection; check active live chat ID |
+| YouTube `invalid_grant` or reauth setting ignored | External Testing-mode tokens expire after seven days; saved rotated tokens take precedence. Follow [YouTube reauthorization](../platforms/youtube.md#token-storage-and-reauthorization) |
 | X budget exhausted | Shared post/profile reservation headroom, UTC-day usage, explicit spend gate |
 | Twitch reauth setting ignored | Persisted rotated token takes precedence; follow the scoped reconnect procedure |
 | GitHub Azure release skipped | `ENABLE_AZURE_DEPLOYMENT=true`, manual dispatch on `main` |

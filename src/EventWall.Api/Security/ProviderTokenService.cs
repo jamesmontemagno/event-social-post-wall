@@ -70,11 +70,10 @@ public sealed class ProviderTokenService(
             var rotatedRefreshToken = document.RootElement.TryGetProperty("refresh_token", out var nextRefreshToken)
                 ? nextRefreshToken.GetString()
                 : null;
-            if (provider == "Twitch" &&
-                !string.IsNullOrWhiteSpace(rotatedRefreshToken) &&
+            if (!string.IsNullOrWhiteSpace(rotatedRefreshToken) &&
                 !string.Equals(refreshToken, rotatedRefreshToken, StringComparison.Ordinal))
             {
-                await PersistTwitchRefreshTokenAsync(rotatedRefreshToken, cancellationToken);
+                await PersistRefreshTokenAsync(provider, rotatedRefreshToken, cancellationToken);
             }
 
             var lifetimeSeconds = document.RootElement.TryGetProperty("expires_in", out var lifetime) &&
@@ -93,9 +92,8 @@ public sealed class ProviderTokenService(
 
     private async Task<string> GetRefreshTokenAsync(string provider, CancellationToken cancellationToken)
     {
-        if (provider == "Twitch")
+        await using (var database = await databaseFactory.CreateDbContextAsync(cancellationToken))
         {
-            await using var database = await databaseFactory.CreateDbContextAsync(cancellationToken);
             var stored = await database.ProviderCredentials.AsNoTracking()
                 .SingleOrDefaultAsync(item => item.Provider == provider, cancellationToken);
             if (stored is not null)
@@ -107,7 +105,7 @@ public sealed class ProviderTokenService(
                 catch (CryptographicException exception)
                 {
                     throw new InvalidOperationException(
-                        "The stored Twitch refresh token could not be decrypted. Restore the original data-protection key ring or reconnect Twitch.",
+                        $"The stored {provider} refresh token could not be decrypted. Restore the original data-protection key ring or reconnect {provider}.",
                         exception);
                 }
             }
@@ -119,16 +117,16 @@ public sealed class ProviderTokenService(
             : configured;
     }
 
-    private async Task PersistTwitchRefreshTokenAsync(string refreshToken, CancellationToken cancellationToken)
+    private async Task PersistRefreshTokenAsync(string provider, string refreshToken, CancellationToken cancellationToken)
     {
         await using var database = await databaseFactory.CreateDbContextAsync(cancellationToken);
         var stored = await database.ProviderCredentials.SingleOrDefaultAsync(
-            item => item.Provider == "Twitch", cancellationToken);
+            item => item.Provider == provider, cancellationToken);
         if (stored is null)
         {
             database.ProviderCredentials.Add(new ProviderCredential
             {
-                Provider = "Twitch",
+                Provider = provider,
                 ProtectedRefreshToken = _protector.Protect(refreshToken)
             });
         }

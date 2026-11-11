@@ -872,7 +872,7 @@ if (isAdminDeployment)
         CancellationToken cancellationToken) =>
         await ChangePostStateAsync(id, PostStatus.Withdrawn, request.Version, request.Reason, factory, context, cancellationToken));
 
-    owner.MapPost("/manual", async (
+    admin.MapPost("/manual", async (
         ManualPostRequest request,
         IDbContextFactory<EventWallDbContext> factory,
         CancellationToken cancellationToken) =>

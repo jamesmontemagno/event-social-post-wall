@@ -85,6 +85,13 @@ Provider names are `Twitch`, `YouTube`, `X`, `Bluesky`, `Mastodon`.
 Prefix each setting with `Social__<Provider>__`. Never set these on Public or
 Submission. Analytics/export permission is not implied by collection permission.
 
+::: danger YouTube Testing-mode refresh tokens expire after 7 days
+Google's External OAuth apps in **Testing** issue YouTube refresh tokens that
+expire after seven days, even if access tokens are refreshed. Plan
+reauthorization or production publishing before your event; see the
+[YouTube setup and reconnect guide](platforms/youtube.md).
+:::
+
 ## Cloudflare Turnstile: Submission only
 
 See [Turnstile setup](platforms/turnstile.md).

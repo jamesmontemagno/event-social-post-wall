@@ -50,6 +50,7 @@ function setup(sources: SourceInfo[] = [], isAdministrator = true, postOverrides
     if (url.pathname.endsWith('/block-author')) { post.authorBlocked = true; data = { blocked: true } }
     if (url.pathname.endsWith('/approve')) { post.status = 'Live'; post.version = 1 }
     if (url.pathname.endsWith('/withdraw')) { post.status = 'Withdrawn'; post.version = 2 }
+    if (url.pathname === '/api/admin/manual') data = { ...post, source: 'Manual', status: 'Pending' }
     if (url.pathname.endsWith('/queue')) data = !url.searchParams.has('status') || url.searchParams.get('status') === post.status ? [{ ...post }] : []
     if (url.pathname === '/api/admin/promos') {
       if (init?.method === 'POST') {
@@ -323,12 +324,29 @@ it('gives a named moderator only moderation views and never requests owner setti
   expect(screen.getByText('TestModerator', { selector: 'strong' })).toBeTruthy()
   for (const name of ['Social connections', 'Post filters', 'Event report', 'Team']) expect(screen.queryByRole('tab', { name })).toBeNull()
   expect(screen.queryByRole('button', { name: /Portal/ })).toBeNull()
-  expect(screen.queryByRole('button', { name: /Add manually/ })).toBeNull()
+  expect(screen.getByRole('button', { name: /Add manually/ })).toBeTruthy()
   expect(screen.queryByRole('link', { name: /Export/ })).toBeNull()
   expect(fetchMock.mock.calls.some(([url]) => /\/(sources|settings|analytics|team)/.test(String(url)))).toBe(false)
   fireEvent.click(screen.getByRole('button', { name: /Approve & send live/ }))
   await screen.findByText('Approved and sent live.')
   expect(requests).toEqual([{ url: '/api/admin/posts/one/approve', body: { version: 0 } }])
+})
+
+it('lets a moderator add a manual post to the review queue with CSRF', async () => {
+  const { requests, fetchMock } = setup([], false)
+  await screen.findByText('A useful question')
+  fireEvent.click(screen.getByRole('button', { name: /Add manually/ }))
+  fireEvent.change(screen.getByRole('textbox', { name: 'Post text' }), { target: { value: 'A message from the event' } })
+  fireEvent.change(screen.getByRole('textbox', { name: 'Author attribution (optional)' }), { target: { value: 'Event staff' } })
+  fireEvent.change(screen.getByRole('textbox', { name: 'HTTPS source link (optional)' }), { target: { value: 'https://example.test/post' } })
+  fireEvent.click(screen.getByRole('button', { name: 'Add post' }))
+  await screen.findByText('Manual post added to the review queue as unverified.')
+  expect(requests).toEqual([{ url: '/api/admin/manual', body: {
+    text: 'A message from the event', authorName: 'Event staff', sourceUrl: 'https://example.test/post',
+  } }])
+  const request = fetchMock.mock.calls.find(([url]) => String(url) === '/api/admin/manual')
+  expect(new Headers(request?.[1]?.headers).get('X-CSRF-TOKEN')).toBe('token')
+  expect(screen.queryByRole('textbox', { name: 'Post text' })).toBeNull()
 })
 
 it('returns to named sign-in when a moderator session is revoked', async () => {

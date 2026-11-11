@@ -203,7 +203,7 @@ public sealed class TeamAccessApiTests
         await fixture.LoginMember(invitation.AccessCode);
         foreach (var path in new[] { "/team", "/sources", "/settings", "/analytics", "/export.json", "/export.csv" })
             Assert.Equal(HttpStatusCode.Forbidden, (await fixture.Member.GetAsync("/api/admin" + path)).StatusCode);
-        foreach (var path in new[] { "/team", "/manual", "/settings/submissions", "/settings/filters", "/sources/youtube/collection",
+        foreach (var path in new[] { "/team", "/settings/submissions", "/settings/filters", "/sources/youtube/collection",
             $"/team/{invitation.Member.Id}/code", $"/team/{invitation.Member.Id}/status" })
             Assert.Equal(HttpStatusCode.Forbidden, (await fixture.Member.PostAsJsonAsync("/api/admin" + path, new { version = 1, username = "OtherMember", open = false })).StatusCode);
 
@@ -230,6 +230,45 @@ public sealed class TeamAccessApiTests
         Assert.Equal(3, Assert.Single(team!).ModerationActions);
         (await fixture.Member.PostAsync("/api/admin/logout", null)).EnsureSuccessStatusCode();
         Assert.Equal(HttpStatusCode.Unauthorized, (await fixture.Member.GetAsync("/api/admin/queue")).StatusCode);
+    }
+
+    [Fact]
+    public async Task Moderators_can_add_manual_posts_with_csrf_and_normal_filtering_and_approval()
+    {
+        await using var fixture = new Fixture();
+        const string path = "/api/admin/manual";
+        var request = new { text = "Can we hear the next speaker?", authorName = "Event staff" };
+        Assert.Equal(HttpStatusCode.Unauthorized, (await fixture.Member.PostAsJsonAsync(path, request)).StatusCode);
+        await fixture.LoginOwner();
+        var invitation = await fixture.Invite();
+        await fixture.LoginMember(invitation.AccessCode);
+        fixture.Member.DefaultRequestHeaders.Remove("X-CSRF-TOKEN");
+        Assert.Equal(HttpStatusCode.BadRequest, (await fixture.Member.PostAsJsonAsync(path, request)).StatusCode);
+        await fixture.LoginMember(invitation.AccessCode);
+
+        var response = await fixture.Member.PostAsJsonAsync(path, request);
+        Assert.Equal(HttpStatusCode.Created, response.StatusCode);
+        var post = (await response.Content.ReadFromJsonAsync<StaffPostDto>(Json))!;
+        Assert.Equal(PostSource.Manual, post.Source);
+        Assert.Equal(PostStatus.Pending, post.Status);
+        Assert.Equal(request.text, post.Text);
+        Assert.Equal(request.authorName, post.AuthorName);
+        Assert.Contains((await fixture.Member.GetFromJsonAsync<StaffPostDto[]>("/api/admin/queue?status=Pending", Json))!,
+            item => item.Id == post.Id);
+
+        var rejected = await fixture.Member.PostAsJsonAsync(path, new { text = "Hello" });
+        Assert.Equal(HttpStatusCode.Created, rejected.StatusCode);
+        var filtered = (await rejected.Content.ReadFromJsonAsync<StaffPostDto>(Json))!;
+        Assert.Equal(PostStatus.Rejected, filtered.Status);
+        Assert.Contains(PostFilterReason.SingleWord, filtered.FilterReasons);
+
+        (await fixture.Member.PostAsJsonAsync($"/api/admin/posts/{post.Id}/approve", new { version = post.Version }))
+            .EnsureSuccessStatusCode();
+        await using var database = fixture.Database();
+        Assert.Equal(PostStatus.Live, (await database.Posts.SingleAsync(item => item.Id == post.Id)).Status);
+        var action = await database.ModerationActions.SingleAsync(item => item.PostId == post.Id);
+        Assert.Equal(invitation.Member.Id, action.StaffMemberId);
+        Assert.Equal("TestModerator", action.StaffUsername);
     }
 
     [Fact]
