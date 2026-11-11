@@ -13,7 +13,7 @@ operator steps. Never point a first-run script at an existing event database.
 ## 1. Prerequisites and design
 
 - An Azure subscription with permission to create resources in a dedicated resource group.
-- Azure CLI with Bicep support, .NET 10 SDK, Node.js 22+, and PowerShell 7.
+- Azure CLI with Bicep support, .NET 10 SDK, a [supported Node.js version](../getting-started.md#requirements), and PowerShell 7.
 - A GitHub account/repository able to use Actions and environment required reviewers
   for production promotion. Some private-repository plans do not support that gate.
 - A globally unique, lowercase app prefix of 3-20 characters (letters, digits,

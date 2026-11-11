@@ -9,7 +9,7 @@ Thank you for helping improve Event Social Post Wall.
 
 ## Checks
 
-Requirements: .NET 10 SDK, Node.js 22+, npm; Azure CLI for Bicep validation.
+Requirements: .NET 10 SDK, Node.js (22.22.2+ on 22.x, 24.15+ on 24.x, or 26+), npm; Azure CLI for Bicep validation.
 From the repository root:
 
 ```powershell

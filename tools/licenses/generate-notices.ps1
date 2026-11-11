@@ -53,7 +53,7 @@ Add-Section 'Space Grotesk: LICENSE' (Get-Content (Join-Path $fontDirectory 'LIC
 
 $reactLicense = Get-Content (Join-Path $web 'node_modules\react\LICENSE') -Raw
 $mit = $reactLicense.Substring($reactLicense.IndexOf('Permission is hereby granted'))
-$apache = Get-Content (Join-Path $web 'node_modules\typescript\LICENSE.txt') -Raw
+$apache = Get-Content (Join-Path $web 'node_modules\typescript\LICENSE') -Raw
 $templates = @{ 'MIT' = $mit; 'Apache-2.0' = $apache }
 $seen = @{}
 foreach ($project in @('EventWall.Api', 'EventWall.AppHost')) {
@@ -107,7 +107,7 @@ foreach ($name in @('react', 'react-dom', 'scheduler', 'typescript', 'qrcode.rea
     $directory = Join-Path $web "node_modules\$name"
     $package = Get-Content (Join-Path $directory 'package.json') -Raw | ConvertFrom-Json
     Add-Section "npm: $name/$($package.version)" "Declared license: $($package.license)"
-    $files = @(Get-ChildItem $directory -File | Where-Object { $_.Name -match '(?i)^(license(\.txt|\.md)?|third.*notice.*)$' })
+    $files = @(Get-ChildItem $directory -File | Where-Object { $_.Name -match '(?i)^(license(\.txt|\.md)?|notice(\.txt|\.md)?|third.*notice.*)$' })
     if ($files.Count -eq 0) { throw "Missing license for $name" }
     foreach ($file in $files) { Add-Section "${name}: $($file.Name)" (Get-Content $file.FullName -Raw) }
 }

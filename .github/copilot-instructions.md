@@ -2,13 +2,13 @@
 
 ## Build, test, and lint
 
-Requirements: .NET 10 SDK, Node.js 22+, and npm.
+Requirements: .NET 10 SDK, Node.js (22.22.2+ on 22.x, 24.15+ on 24.x, or 26+), npm, and the Aspire CLI (recommended).
 
-Run the local stack with Aspire:
+Run the local stack with the Aspire CLI (`dotnet run --project src\EventWall.AppHost` is equivalent):
 
 ```powershell
 npm ci --prefix src\EventWall.Web
-dotnet run --project src\EventWall.AppHost
+aspire run
 ```
 
 Build the solution and web app:

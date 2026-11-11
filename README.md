@@ -43,12 +43,28 @@ See [architecture and trust boundaries](docs/architecture.md).
 ## Run locally
 
 Install the [.NET 10 SDK](https://dotnet.microsoft.com/download/dotnet/10.0),
-[Node.js 22+](https://nodejs.org/), and Git. From the repository root:
+[Node.js](https://nodejs.org/) (22.22.2+ on 22.x, 24.15+ on 24.x, or 26+), Git, and the
+[Aspire CLI](https://aspire.dev/get-started/install-cli/) (recommended):
+
+```powershell
+irm https://aspire.dev/install.ps1 | iex          # Windows (PowerShell)
+```
+
+```bash
+curl -sSL https://aspire.dev/install.sh | bash    # macOS / Linux
+```
+
+Then, from the repository root:
 
 ```powershell
 npm ci --prefix src\EventWall.Web
-dotnet run --project src\EventWall.AppHost
+aspire run
 ```
+
+`aspire run` builds the AppHost, starts every site, and prints the dashboard
+link. Stop with Ctrl+C or `aspire stop`; use `aspire logs admin-api -f` to stream
+a site's logs. Prefer plain .NET? `dotnet run --project src\EventWall.AppHost`
+starts the same stack.
 
 | Site | Address |
 | --- | --- |
